@@ -1,11 +1,36 @@
-import { GameAreaComponent } from "./components/game-area/GameAreaComponent"
-import { HeaderComponent } from "./components/header/HeaderComponent"
+import { GameBoard } from "./components/organisms/GameBoard"
+import { HeaderComponent } from "./components/organisms/HeaderComponent"
 
 function App() {
   return (
     <div className="bg-[var(--brand-bg)] h-full font-['Inter',system-ui,sans-serif]">
       <HeaderComponent />
-      <GameAreaComponent />
+      <GameBoard guesses={[
+        {
+          guess: "CRANE",
+          feedback: {
+            correctPosition: 2,
+            correctLetterWrongPosition: 1,
+            incorrect: 2
+          }
+        },
+        {
+          guess: "CRANE",
+          feedback: {
+            correctPosition: 2,
+            correctLetterWrongPosition: 1,
+            incorrect: 2
+          }
+        },
+        {
+          guess: "CRANE",
+          feedback: {
+            correctPosition: 2,
+            correctLetterWrongPosition: 1,
+            incorrect: 2
+          }
+        },
+      ]}/>
     </div>
   )
 }
