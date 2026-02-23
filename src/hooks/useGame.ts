@@ -1,8 +1,9 @@
-import { useRef, useState, useCallback, useMemo } from "react"
+import { useRef, useState, useCallback, useMemo, useEffect } from "react"
 import { GameEngine } from "../core/gameEngine"
 import { Dictionary } from "../core/dictionary"
 import type { GuessResult, GameStatus } from "../core/types"
 import { getDailyAnswer } from "../utils/getDailyAnswer"
+import { saveGame, loadGame } from "../utils/storage"
 
 type UseGameOptions = {
   dictionary: Dictionary
@@ -13,7 +14,6 @@ export function useGame({
   dictionary,
   maxAttempts = 7,
 }: UseGameOptions) {
-  // Seleciona palavra do dia apenas uma vez
   const secret = useMemo(() => {
     return getDailyAnswer(dictionary.getAnswersSet())
   }, [dictionary])
@@ -26,6 +26,7 @@ export function useGame({
   const [status, setStatus] = useState<GameStatus>("playing")
   const [remainingAttempts, setRemainingAttempts] = useState(maxAttempts)
   const [error, setError] = useState<string | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const syncState = useCallback(() => {
     const engine = engineRef.current
@@ -34,13 +35,40 @@ export function useGame({
     setRemainingAttempts(engine.getRemainingAttempts())
   }, [])
 
+  // Restaurar jogo salvo ao montar
+  useEffect(() => {
+    const saved = loadGame()
+
+    if (saved) {
+      const restoredEngine = new GameEngine(secret, dictionary, maxAttempts)
+
+      saved.attempts.forEach(g => {
+        restoredEngine.submitGuess(g.guess)
+      })
+
+      engineRef.current = restoredEngine
+      syncState()
+    }
+
+    setIsLoaded(true)
+  }, [secret, dictionary, maxAttempts, syncState])
+
   const submitGuess = useCallback(
     (guess: string) => {
       try {
+        if (status !== "playing") return
+
         setError(null)
 
         engineRef.current.submitGuess(guess)
         syncState()
+
+        saveGame({
+          date: new Date().toISOString(),
+          secret,
+          attempts: engineRef.current.getGuesses(),
+          status: engineRef.current.getStatus(),
+        })
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message)
@@ -49,7 +77,7 @@ export function useGame({
         }
       }
     },
-    [syncState]
+    [status, syncState]
   )
 
   const resetGame = useCallback(() => {
@@ -58,7 +86,7 @@ export function useGame({
     setStatus("playing")
     setRemainingAttempts(maxAttempts)
     setError(null)
-  }, [secret, dictionary, maxAttempts])
+  }, [secret, dictionary, maxAttempts, status])
 
   return {
     guesses,
@@ -67,5 +95,7 @@ export function useGame({
     submitGuess,
     error,
     resetGame,
+    isLoaded,
+    isFinished: status !== "playing",
   }
 }

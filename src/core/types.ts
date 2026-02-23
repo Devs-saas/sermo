@@ -9,4 +9,12 @@ export type GuessResult = {
   feedback: Feedback
 }
 
+export type PersistedGame = {
+  date: string;
+  secret: string;
+  attempts: GuessResult[];
+  status: GameStatus;
+};
+
+
 export type GameStatus = "playing" | "won" | "lost"
