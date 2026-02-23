@@ -1,76 +1,77 @@
-# sermo
-Senha &amp; Termo
+# Sermo
+Senha &amp; Termo!
 
-# React + TypeScript + Vite
+Uma versão que mistura Termo com Senha, onde o jogador não vê quais letras estão corretas, apenas as quantidades de acertos.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![anime surpreso](https://media.tenor.com/E4b9ghK-blwAAAAj/okaminc.gif)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧠 Conceito
 
-## React Compiler
+Diferente do Termo tradicional, aqui o jogador recebe apenas:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🟢 Quantidade de letras na posição correta  
+- 🟡 Quantidade de letras presentes em posição errada  
+- 🔴 Quantidade de letras ausentes  
 
-## Expanding the ESLint configuration
+Isso transforma o jogo em um desafio mais lógico e dedutivo.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- ⚡ Vite
+- ⚛ React
+- 🟦 TypeScript
+- 🍞 Bun
+- 💾 LocalStorage (persistência diária)
+- 🎨 TailwindCSS
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 📅 Sistema Diário
+
+A palavra é determinística por data
+
+O progresso é salvo no localStorage
+
+Não é possível jogar novamente no mesmo dia
+
+Um novo jogo começa automaticamente no dia seguinte
+
+---
+
+## 🎮 Como Rodar
+
+#### Instalar dependencias
+```bash
+bun install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+#### Rodar em desenvolvimento
+```bash
+bun run dev
 ```
+
+#### Build
+```bash
+bun run build
+```
+
+--- 
+
+## 📋 Testes
+
+#### O projeto utiliza:
+- Vitest
+
+#### Para rodar:
+
+```bash
+bun run test
+```
+
+## 💚 Obrigado
+
+![anime palmeiras](https://i.pinimg.com/474x/c3/a9/23/c3a92302f8e7bc2215774ceb558e2ab7.jpg)
