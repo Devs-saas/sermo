@@ -9,9 +9,6 @@ function normalizeWord(word: string): string {
 }
 
 export class Dictionary {
-  getAnswersSet(): Set<string> {
-    throw new Error("Method not implemented.")
-  }
   // chutes validos
   private validGuesses: Set<string>
   // palavras que ser selecionadas como respostas
@@ -30,5 +27,9 @@ export class Dictionary {
 
   isPossibleAnswer(word: string): boolean {
     return this.answers.has(word.toUpperCase())
+  }
+
+  getAnswersSet(): Set<string> {
+    return this.answers
   }
 }
