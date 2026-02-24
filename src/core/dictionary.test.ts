@@ -4,11 +4,8 @@ import { Dictionary } from "./dictionary"
 describe("Dictionary", () => {
   let dictionary: Dictionary
 
-  const validGuesses = ["BANCO", "TERMO", "REACT"]
-  const answers = ["BANCO", "TERMO"]
-
   beforeEach(() => {
-    dictionary = new Dictionary(validGuesses, answers)
+    dictionary = new Dictionary()
   })
 
   describe("isValidGuess", () => {
@@ -42,8 +39,8 @@ describe("Dictionary", () => {
   describe("data integrity", () => {
     it("should not mix valid guesses with answers", () => {
       // REACT é guess válido mas não resposta possível
-      expect(dictionary.isValidGuess("REACT")).toBe(true)
-      expect(dictionary.isPossibleAnswer("REACT")).toBe(false)
+      expect(dictionary.isValidGuess("BOIEM")).toBe(true)
+      expect(dictionary.isPossibleAnswer("BOIEM")).toBe(false)
     })
   })
 })

@@ -5,11 +5,8 @@ import { Dictionary } from "./dictionary"
 describe("GameEngine", () => {
   let dictionary: Dictionary
 
-  const validGuesses = ["BANCO", "TERMO", "REACT", "CABOS"]
-  const answers = ["BANCO"]
-
   beforeEach(() => {
-    dictionary = new Dictionary(validGuesses, answers)
+    dictionary = new Dictionary()
   })
 
   it("should start with playing status", () => {
@@ -38,7 +35,7 @@ describe("GameEngine", () => {
     const engine = new GameEngine("BANCO", dictionary, 2)
 
     engine.submitGuess("TERMO")
-    engine.submitGuess("REACT")
+    engine.submitGuess("BOIAM")
 
     expect(engine.getStatus()).toBe("lost")
   })
