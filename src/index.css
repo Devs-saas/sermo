@@ -15,5 +15,8 @@
 
 html, body, #root {
   width: 100vw;
+<<<<<<< fix/fix-height-bug
+=======
   background-color: var(--brand-dark);
+>>>>>>> main
 }
