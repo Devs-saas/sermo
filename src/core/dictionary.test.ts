@@ -34,6 +34,10 @@ describe("Dictionary", () => {
     it("should return false for word not in answers list", () => {
       expect(dictionary.isPossibleAnswer("REACT")).toBe(false)
     })
+
+    it("should return true for a normalized word", () => {
+      expect(dictionary.isPossibleAnswer("MUTUO")).toBe(true)
+    })
   })
 
   describe("data integrity", () => {
