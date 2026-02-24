@@ -69,7 +69,7 @@ bun run build
 #### Para rodar:
 
 ```bash
-bun run test
+bunx vitest
 ```
 
 ## 💚 Obrigado
