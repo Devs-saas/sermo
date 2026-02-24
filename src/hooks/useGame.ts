@@ -97,5 +97,6 @@ export function useGame({
     resetGame,
     isLoaded,
     isFinished: status !== "playing",
+    secret: status === "playing" ? null : secret,
   }
 }

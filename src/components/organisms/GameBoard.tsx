@@ -1,23 +1,23 @@
 import { GuessRow } from "../molecules/GuessRow"
-import type { GuessResult } from "../../core/types"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
+import { useGame } from "../../hooks/useGame"
+import { GameResult } from "./GameResult";
+import { useState } from "react";
 
-type Props = {
-  guesses: GuessResult[]
-}
-
-export function GameBoard({ guesses }: Props) {
-  const remainingRows = 7 - guesses.length
+export function GameBoard() {
+  const gameHook = useGame({maxAttempts: 8})
+  const [resultOpen, setResultOpen] = useState(true)
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
-      {guesses.map((g, i) => (
+      {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
-      <WordInput wordLength={5} onSubmit={(word) => console.log("Submit:", word)} />
+      
+      {!gameHook.isFinished && <WordInput wordLength={5} onSubmit={gameHook.submitGuess} />}
 
-      {Array.from({ length: remainingRows }).map((_, i) => (
+      {Array.from({ length: gameHook.remainingAttempts - 1}).map((_, i) => (
         <div key={i} className="flex w-full items-center justify-center opacity-60">
           <div className="flex gap-1 w-full">
             {Array.from({ length: 5 }).map((_, j) => (
@@ -26,6 +26,16 @@ export function GameBoard({ guesses }: Props) {
           </div>
         </div>
       ))}
+
+      {(gameHook.isFinished && resultOpen) && (
+        <GameResult
+          n_attempts={gameHook.guesses.length}
+          isWinner={gameHook.status === "won"}
+          answer={gameHook.secret || "?????"}
+          onClose={() => setResultOpen(false)}
+        />
+      )}
+
     </div>
   )
 }
