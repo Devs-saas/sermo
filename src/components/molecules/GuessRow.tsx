@@ -12,14 +12,14 @@ export function GuessRow({ guess, nLetters }: Props) {
   nLetters = nLetters ?? 5;
 
   return (
-    <div className="flex w-full flex-col md:flex-row items-center justify-between">
-      <div className="flex w-full gap-1 justify-center">
+    <div className="flex w-full flex-col lg:flex-row gap-2 lg:gap-0 lg:relative items-center justify-between">
+      <div className="flex w-full gap-1 justify-center lg:mx-auto">
         {word.split("").map((l, i) => (
-          <LetterBox key={i} letter={l} />
+          <LetterBox key={i} letter={l} canChangeColor={true}/>
         ))}
       </div>
 
-      <div className="flex w-full md:gap-3 justify-center ">
+      <div className="flex w-full justify-center lg:absolute lg:right-[-80%] lg:top-1/2 lg:-translate-y-1/2">
         <CounterBox color="green" value={feedback.correctPosition} />
         <CounterBox color="yellow" value={feedback.correctLetterWrongPosition} />
         <CounterBox color="red" value={feedback.incorrect} />

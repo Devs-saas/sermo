@@ -5,7 +5,7 @@ export function HeaderComponent() {
       <nav className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6">
         <a href="#" className="inline-flex items-center gap-2">
           <img src="svgs/logo-simple.svg" alt="Sermo logo" className='h-10'/>
-          <span className="text-4xl tracking-[10%]">SERMO</span>
+          <span className="text-4xl tracking-[15%] text-[var(--brand-cream)]">SERMO</span>
         </a>
       </nav>
     </header>

@@ -11,15 +11,15 @@ export function GameBoard({ guesses }: Props) {
   const remainingRows = 7 - guesses.length
 
   return (
-    <div className="flex flex-col mx-auto max-w-md gap-2">
+    <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
       {guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
       <WordInput wordLength={5} onSubmit={(word) => console.log("Submit:", word)} />
-        
+
       {Array.from({ length: remainingRows }).map((_, i) => (
-        <div key={i} className="flex items-center justify-between opacity-50">
-          <div className="flex gap-1">
+        <div key={i} className="flex w-full items-center justify-center opacity-60">
+          <div className="flex gap-1 w-full">
             {Array.from({ length: 5 }).map((_, j) => (
               <LetterBox key={j} letter="" />
             ))}
