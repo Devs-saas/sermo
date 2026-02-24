@@ -3,7 +3,7 @@ import { HeaderComponent } from "./components/organisms/HeaderComponent"
 
 function App() {
   return (
-    <div className="bg-[var(--brand-bg)] h-full font-['Inter',system-ui,sans-serif]">
+    <div className="bg-[var(--brand-dark)] h-full font-['Inter',system-ui,sans-serif]">
       <HeaderComponent />
       <GameBoard guesses={[
         {

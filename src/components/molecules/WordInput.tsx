@@ -45,7 +45,7 @@ export function WordInput({ wordLength, onSubmit, disabled }: Props) {
   }, [currentWord, wordLength, onSubmit, disabled])
 
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1 justify-center">
       {Array.from({ length: wordLength }).map((_, i) => (
         <LetterBox
             key={i}
