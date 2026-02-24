@@ -3,34 +3,9 @@ import { HeaderComponent } from "./components/organisms/HeaderComponent"
 
 function App() {
   return (
-    <div className="bg-[var(--brand-dark)] h-full font-['Inter',system-ui,sans-serif]">
+    <div className="h-full font-['Inter',system-ui,sans-serif]">
       <HeaderComponent />
-      <GameBoard guesses={[
-        {
-          guess: "CRANE",
-          feedback: {
-            correctPosition: 2,
-            correctLetterWrongPosition: 1,
-            incorrect: 2
-          }
-        },
-        {
-          guess: "CRANE",
-          feedback: {
-            correctPosition: 2,
-            correctLetterWrongPosition: 1,
-            incorrect: 2
-          }
-        },
-        {
-          guess: "CRANE",
-          feedback: {
-            correctPosition: 2,
-            correctLetterWrongPosition: 1,
-            incorrect: 2
-          }
-        },
-      ]}/>
+      <GameBoard />
     </div>
   )
 }

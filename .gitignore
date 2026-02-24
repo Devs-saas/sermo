@@ -42,4 +42,7 @@ sketch
 .history
 .ionide
 
+# Dist
+dist
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,dotenv,react,vercel
