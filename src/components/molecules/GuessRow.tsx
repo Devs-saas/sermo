@@ -15,7 +15,7 @@ export function GuessRow({ guess, nLetters }: Props) {
     <div className="flex w-full flex-col md:flex-row items-center justify-between">
       <div className="flex w-full gap-1 justify-center">
         {word.split("").map((l, i) => (
-          <LetterBox key={i} letter={l} maxSize={100/nLetters}/>
+          <LetterBox key={i} letter={l} />
         ))}
       </div>
 
