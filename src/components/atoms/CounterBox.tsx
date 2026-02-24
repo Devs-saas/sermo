@@ -12,7 +12,7 @@ export function CounterBox({ color, value }: Props) {
   }
 
   return (
-    <div className={`w-12 h-12 border flex ${colorMap[color]} text-[#222222] items-center justify-center font-bold text-lg`}>
+    <div className={`w-[33.333%] md:w-12 md:h-12 md:text-lg border flex ${colorMap[color]} text-[#222222] items-center justify-center font-bold`}>
         {value}
     </div>
   )
