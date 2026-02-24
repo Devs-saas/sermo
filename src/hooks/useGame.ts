@@ -6,14 +6,14 @@ import { getDailyAnswer } from "../utils/getDailyAnswer"
 import { saveGame, loadGame } from "../utils/storage"
 
 type UseGameOptions = {
-  dictionary: Dictionary
   maxAttempts?: number
 }
 
 export function useGame({
-  dictionary,
   maxAttempts = 7,
 }: UseGameOptions) {
+  const dictionary = useMemo(() => new Dictionary(), [])
+
   const secret = useMemo(() => {
     return getDailyAnswer(dictionary.getAnswersSet())
   }, [dictionary])
