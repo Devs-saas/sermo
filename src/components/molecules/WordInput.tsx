@@ -1,56 +1,55 @@
-import { useEffect, useState } from "react"
+import { useRef, useState } from "react"
 import { LetterBox } from "../atoms/LetterBox"
 
 type Props = {
   wordLength: number
   onSubmit: (word: string) => void
-  disabled?: boolean
 }
 
-export function WordInput({ wordLength, onSubmit, disabled }: Props) {
-  const [currentWord, setCurrentWord] = useState("")
+export function WordInput({ wordLength, onSubmit }: Props) {
+  const [value, setValue] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (disabled) return
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value
+      .toUpperCase()
+      .replace(/[^A-Z]/g, "") // só letras
+      .slice(0, wordLength)
 
-      const key = e.key.toLowerCase()
+    setValue(val)
+  }
 
-      // Enter envia
-      if (key === "enter") {
-        if (currentWord.length === wordLength) {
-          onSubmit(currentWord)
-          setCurrentWord("")
-        }
-        return
-      }
-
-      // Backspace apaga
-      if (key === "backspace") {
-        setCurrentWord((prev) => prev.slice(0, -1))
-        return
-      }
-
-      // Letras
-      if (/^[a-z]$/.test(key)) {
-        setCurrentWord((prev) => {
-          if (prev.length >= wordLength) return prev
-          return prev + key
-        })
-      }
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && value.length === wordLength) {
+      onSubmit(value)
+      setValue("")
     }
+  }
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [currentWord, wordLength, onSubmit, disabled])
+  function focusInput() {
+    inputRef.current?.focus()
+  }
 
   return (
-    <div className="flex gap-1 justify-center">
+    <div
+      onClick={focusInput}
+      className="flex gap-1 cursor-text relative"
+    >
+      {/* INPUT INVISÍVEL */}
+      <input
+        ref={inputRef}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        className="absolute opacity-0 pointer-events-none"
+        autoFocus
+      />
+
+      {/* CAIXAS VISUAIS */}
       {Array.from({ length: wordLength }).map((_, i) => (
         <LetterBox
-            key={i}
-            letter={currentWord[i] ?? ""}
-            active={i === currentWord.length}
+          key={i}
+          letter={value[i] ?? ""}
         />
       ))}
     </div>
