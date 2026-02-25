@@ -52,7 +52,11 @@ export function Modal(props: ModalProps) {
       onKeyDown={handleClosingWithKeyboard}
       ref={modalDivRef}
     >
-      <div className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`} />
+      <div 
+        className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+        onClick={handleClose}
+      />
+
 
       <div
         className={clsx(
