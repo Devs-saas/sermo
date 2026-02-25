@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Modal, type ModalProps } from "../atoms/Modal"
 import { LetterBox } from "../atoms/LetterBox";
 
