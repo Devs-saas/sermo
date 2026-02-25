@@ -14,9 +14,6 @@
 }
 
 html, body, #root {
-  width: 100vw;
-<<<<<<< fix/fix-height-bug
-=======
+  width: 100vw; 
   background-color: var(--brand-dark);
->>>>>>> main
 }
