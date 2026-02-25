@@ -30,7 +30,7 @@ export function LetterBox({ letter, active, className, canChangeColor = false}: 
     <div
       className={clsx(
         `
-        aspect-square flex-1 border flex text-[#222222] items-center justify-center font-bold text-2xl ${colorStates[colorState]}
+        aspect-square flex-1 border-4 flex text-[#222222] items-center justify-center font-bold text-2xl ${colorStates[colorState]}
         uppercase ${active ? "border-black" : "border-[var(--brand-cream)]"} select-none
       `, className
       )}
