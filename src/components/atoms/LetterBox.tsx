@@ -14,7 +14,7 @@ type Props = {
   letter: string
   active?: boolean
   className?: string
-  initialState: ColorState
+  initialState?: ColorState
   canChangeColor?: boolean
 }
 
