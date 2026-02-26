@@ -4,16 +4,25 @@ import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
 import { GameResult } from "./GameResult";
 import { useState } from "react";
+import { ToggleSwitch } from "../atoms/ToggleSwitch";
 
 export function GameBoard() {
   const gameHook = useGame({maxAttempts: 8})
   const [resultOpen, setResultOpen] = useState(true)
+  const [seeSolution, setSeeSolution] = useState(false)
+
+  console.log(seeSolution)
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
+      <ToggleSwitch initialState={seeSolution} onCheckedChange={setSeeSolution}/>
+
+      <div className="text-xs text-white/70">seeSolution: {String(seeSolution)}</div>
+
       {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
+
       
       {!gameHook.isFinished && <WordInput wordLength={5} onSubmit={gameHook.submitGuess} />}
 
@@ -35,7 +44,6 @@ export function GameBoard() {
           onClose={() => setResultOpen(false)}
         />
       )}
-
     </div>
   )
 }
