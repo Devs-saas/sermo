@@ -1,29 +1,33 @@
 import { useState } from "react"
 import clsx from "clsx"
 
+type ColorState = "neutral" | "right" | "wrong-placed" | "wrong";
+
+const colorStates: Record<ColorState, string> = {
+  "neutral"     : "bg-[var(--brand-cream)]",
+  "right"       : "bg-[var(--brand-selected-green)]",
+  "wrong-placed": "bg-[var(--brand-selected-yellow)]",
+  "wrong"       : "bg-[var(--brand-selected-red)]"
+}
+
 type Props = {
   letter: string
   active?: boolean
   className?: string
+  initialState: ColorState
   canChangeColor?: boolean
 }
 
-export function LetterBox({ letter, active, className, canChangeColor = false}: Props) {
-  const colorStates = [
-    "bg-[var(--brand-cream)]",
-    "bg-[var(--brand-selected-green)]",
-    "bg-[var(--brand-selected-yellow)]",
-    "bg-[var(--brand-selected-red)]"
-  ];
-
-  const [colorState, setColorState] = useState(0);
+export function LetterBox({ letter, active, className, initialState = "neutral", canChangeColor = false}: Props) {
+  const [colorState, setColorState] = useState<ColorState>(initialState);
+  const colorStateOrder: ColorState[] = ["neutral", "right", "wrong-placed", "wrong"];
 
   const handleColorState = () => {
     if (!canChangeColor) return;
+    const currentIndex = colorStateOrder.indexOf(colorState);
+    const nextIndex = (currentIndex + 1) % colorStateOrder.length;
 
-    const maxColorState = colorStates.length;
-
-    setColorState((colorState + 1) % maxColorState);
+    setColorState(colorStateOrder[nextIndex]);
   }
 
   return (
