@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import clsx from "clsx";
 
 export type ModalProps = {
@@ -19,8 +19,11 @@ export function Modal(props: ModalProps) {
   const { attrs, styling, onClose } = props;
   const [isClosing, setIsClosing] = useState(false);
 
+  const modalDivRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    modalDivRef.current?.focus();
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -47,6 +50,7 @@ export function Modal(props: ModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center"
       tabIndex={-1}
       onKeyDown={handleClosingWithKeyboard}
+      ref={modalDivRef}
     >
       <div className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`} />
 
