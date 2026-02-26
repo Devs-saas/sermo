@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HelpModal } from "../molecules/HelpModal";
 
 export function HeaderComponent() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.length === 0) {
+      setHelpModalOpen(true);
+    }
+  }, [])
 
   return (
     <>
