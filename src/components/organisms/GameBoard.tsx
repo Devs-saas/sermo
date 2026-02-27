@@ -2,9 +2,9 @@ import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
-import { GameResult } from "./GameResult";
 import { useState } from "react";
 import { ToggleSwitch } from "../atoms/ToggleSwitch";
+import { ResultModal } from "../molecules/ResultModal";
 
 export function GameBoard() {
   const gameHook = useGame({maxAttempts: 8})
@@ -15,7 +15,6 @@ export function GameBoard() {
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
-      <ToggleSwitch initialState={seeSolution} onCheckedChange={setSeeSolution}/>
 
       <div className="text-xs text-white/70">seeSolution: {String(seeSolution)}</div>
 
@@ -36,9 +35,9 @@ export function GameBoard() {
         </div>
       ))}
 
-      {(gameHook.isFinished && resultOpen) && (
-        <GameResult
-          n_attempts={gameHook.guesses.length}
+      {(gameHook.isFinished || true && resultOpen) && (
+        <ResultModal 
+          nAttempts={gameHook.guesses.length}
           isWinner={gameHook.status === "won"}
           answer={gameHook.secret || "?????"}
           onClose={() => setResultOpen(false)}
