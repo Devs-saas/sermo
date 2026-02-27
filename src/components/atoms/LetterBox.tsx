@@ -31,7 +31,7 @@ export function LetterBox({ letter, active, className, canChangeColor = false}: 
       className={clsx(
         `
         aspect-square flex-1 flex text-[#222222] items-center justify-center font-bold text-2xl ${colorStates[colorState]}
-        uppercase ${active ? "border-black border-4" : ""} select-none pointer-events-none
+        uppercase ${active ? "border-black border-4" : ""} select-none
       `, className
       )}
       onClick={handleColorState}
