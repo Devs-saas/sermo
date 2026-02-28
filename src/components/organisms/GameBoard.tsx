@@ -2,17 +2,15 @@ import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
-import { useCallback, useState } from "react";
-import { ToggleSwitch } from "../atoms/ToggleSwitch";
+import { useState } from "react";
 import { ResultModal } from "../molecules/ResultModal";
-import { saveGameStatistics } from "../../utils/storage";
 
 export function GameBoard() {
   const maxAttempts = 8;
 
   const gameHook = useGame({maxAttempts})
   const [resultOpen, setResultOpen] = useState(true)
-  const [seeSolution, setSeeSolution] = useState(false)
+  // const [seeSolution, setSeeSolution] = useState(false)
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">

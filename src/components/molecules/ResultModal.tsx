@@ -1,7 +1,6 @@
 import { Modal, type ModalProps } from "../atoms/Modal";
 import { StatsHistogram } from "../atoms/StatsHistogram";
 import { usePlayerStatistics } from "../../hooks/usePlayerStatistics";
-import { saveGameStatistics } from "../../utils/storage";
 
 type ResultModalProps = {
   maxAttempts: number,
