@@ -79,7 +79,7 @@ export function ResultModal(props: ResultModalProps) {
         <StatsHistogram
           label="💀"
           max={playerStats.nGamesPlayed}
-          value={playerStats.nGamesPlayed - playerStats.nGamesWon}
+          value={playerStats.playedGameAttempts[8]}
         />
       </div>
     </div>

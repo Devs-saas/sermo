@@ -33,8 +33,13 @@ export function saveGameStatistics(game: PersistedGame) : PlayerStatistics {
   const data = localStorage.getItem(STATS_STORAGE_KEY);
 
   const attemptsKey = game.attempts.length;
-  const newPlayedGameAttempts = [0,0,0,0,0,0,0,0];
-  newPlayedGameAttempts[attemptsKey-1] += 1;
+  const newPlayedGameAttempts = [0,0,0,0,0,0,0,0,0];
+
+  if (game.status === 'lost') {
+    newPlayedGameAttempts[attemptsKey] +=1
+  } else {
+    newPlayedGameAttempts[attemptsKey - 1] += 1;
+  }
 
   let newStatistics: PlayerStatistics = {
     nGamesPlayed: 1,
@@ -52,10 +57,14 @@ export function saveGameStatistics(game: PersistedGame) : PlayerStatistics {
 
   let oldPlayedGameAttempts = oldStats?.playedGameAttempts;
   if (!oldPlayedGameAttempts) {
-    oldPlayedGameAttempts = [0,0,0,0,0,0,0,0];
+    oldPlayedGameAttempts = [0,0,0,0,0,0,0,0,0];
   }
 
-  oldPlayedGameAttempts[attemptsKey - 1] += 1;
+  if (game.status === 'lost') {
+    oldPlayedGameAttempts[attemptsKey] +=1
+  } else {
+    oldPlayedGameAttempts[attemptsKey - 1] += 1;
+  }
 
   const actualVictorySequence = game.status === "won" ? oldStats.actualVictorySequence + 1 : 0;
   const newBestVictorySequence = oldStats.bestVictorySequence >= actualVictorySequence
