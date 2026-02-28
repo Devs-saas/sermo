@@ -1,12 +1,16 @@
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react"
 import { LetterBox } from "../atoms/LetterBox"
+
+export type WordInputHandle = {
+  pressKey: (key: string) => void
+}
 
 type Props = {
   wordLength: number
   onSubmit: (word: string) => void
 }
 
-export function WordInput({ wordLength, onSubmit }: Props) {
+export const WordInput = forwardRef<WordInputHandle, Props>(function WordInput({ wordLength, onSubmit }: Props, ref: React.ForwardedRef<WordInputHandle>) {
   const [letters, setLetters] = useState<string[]>(
     Array(wordLength).fill("")
   )
@@ -18,6 +22,41 @@ export function WordInput({ wordLength, onSubmit }: Props) {
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  useImperativeHandle(ref, () => ({
+    pressKey(key: string) {
+      const upper = key.toUpperCase()
+      if (upper === "ENTER") {
+        if (letters.every((l) => l !== "")) {
+          onSubmit(letters.join(""))
+          setLetters(Array(wordLength).fill(""))
+          setRawValue("")
+          setCursor(0)
+        }
+      } else if (upper === "BACKSPACE") {
+        setLetters((prev) => {
+          const copy = [...prev]
+          if (copy[cursor] !== "") {
+            copy[cursor] = ""
+            setCursor((c) => Math.max(0, c - 1))
+          } else if (cursor > 0) {
+            copy[cursor - 1] = ""
+            setCursor(cursor - 1)
+          }
+          return copy
+        })
+        setRawValue((r) => r.slice(0, -1))
+      } else if (/^[A-Z]$/.test(upper)) {
+        setLetters((prev) => {
+          const copy = [...prev]
+          copy[cursor] = upper
+          return copy
+        })
+        if (cursor < wordLength - 1) setCursor((c) => c + 1)
+        setRawValue((r) => r + upper)
+      }
+    },
+  }))
 
   function focusAt(position: number) {
     setCursor(position)
@@ -115,4 +154,4 @@ export function WordInput({ wordLength, onSubmit }: Props) {
       </div>
     </div>
   )
-}
+})

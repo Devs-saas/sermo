@@ -3,13 +3,14 @@ import { KeyboardLetter } from "../atoms/KeyboardLetter"
 type Props = {
     letters: string[]
     offset?: number
+    onKeyPress: (letter: string) => void
 }
 
-export function KeyboardRow({ letters, offset = 0 }: Props) {
+export function KeyboardRow({ letters, offset = 0, onKeyPress }: Props) {
     return (
         <div className="flex gap-1" style={{ paddingLeft: `${offset}px` }}>
             {letters.map((letter) => (
-                <KeyboardLetter key={letter} letter={letter} />
+                <KeyboardLetter key={letter} letter={letter} onKeyPress={onKeyPress} />
             ))}
         </div>
     )
