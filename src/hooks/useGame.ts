@@ -2,7 +2,7 @@ import { useRef, useState, useCallback, useMemo, useEffect } from "react"
 import { GameEngine } from "../core/gameEngine"
 import { Dictionary } from "../core/dictionary"
 import type { GuessResult, GameStatus } from "../core/types"
-import { saveGame, loadGame, getDateKey, getTodayKey } from "../utils/storage"
+import { saveGame, loadGame, getDateKey, getTodayKey, saveGameStatistics } from "../utils/storage"
 import { getDailyAnswer } from "../utils/getDailyAnswer"
 
 type UseGameOptions = {
@@ -67,19 +67,27 @@ export function useGame({
   const submitGuess = useCallback(
     (guess: string) => {
       try {
-        if (status !== "playing") return
-
         setError(null)
 
         engineRef.current?.submitGuess(guess)
         syncState()
-        
+
         saveGame(gameKeyRef.current??getTodayKey(),{
           date: new Date().toISOString(),
           secret: secretRef.current??"",
           attempts: engineRef.current?.getGuesses()??[],
           status: engineRef.current?.getStatus()??"playing",
         })
+
+        if (engineRef.current?.getStatus() === "playing") return;
+
+        saveGameStatistics({
+          date: new Date().toISOString(),
+          secret: secretRef.current??"",
+          attempts: engineRef.current?.getGuesses()??[],
+          status: engineRef.current?.getStatus()??"playing",
+        });
+
       } catch (err) {
         console.error("Error submitting guess:", err)
         if (err instanceof Error) {
