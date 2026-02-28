@@ -32,10 +32,14 @@ export function loadGame(key: string): PersistedGame | null {
 export function saveGameStatistics(game: PersistedGame) : PlayerStatistics {
   const data = localStorage.getItem(STATS_STORAGE_KEY);
 
+  const attemptsKey = game.attempts.length;
+  const newPlayedGameAttempts = [0,0,0,0,0,0,0,0];
+  newPlayedGameAttempts[attemptsKey-1] += 1;
+
   let newStatistics: PlayerStatistics = {
     nGamesPlayed: 1,
     nGamesWon: game.status === "won" ? 1 : 0,
-    playedGameAttempts:[game.attempts.length],
+    playedGameAttempts: newPlayedGameAttempts,
     actualVictorySequence: 1,
     bestVictorySequence: 1
   }
@@ -44,28 +48,29 @@ export function saveGameStatistics(game: PersistedGame) : PlayerStatistics {
     localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(newStatistics))
     return newStatistics;
   }
-
   const oldStats = JSON.parse(data) as PlayerStatistics;
 
   let oldPlayedGameAttempts = oldStats?.playedGameAttempts;
   if (!oldPlayedGameAttempts) {
-    oldPlayedGameAttempts = [];
+    oldPlayedGameAttempts = [0,0,0,0,0,0,0,0];
   }
 
-  oldPlayedGameAttempts.push(game.attempts.length)
+  oldPlayedGameAttempts[attemptsKey - 1] += 1;
 
-  const newBestVictorySequence = oldStats.bestVictorySequence >= oldStats.actualVictorySequence + 1
+  const actualVictorySequence = game.status === "won" ? oldStats.actualVictorySequence + 1 : 0;
+  const newBestVictorySequence = oldStats.bestVictorySequence >= actualVictorySequence
     ? oldStats.bestVictorySequence
-    : oldStats.actualVictorySequence + 1
+    : actualVictorySequence
 
   newStatistics = {
     nGamesPlayed: oldStats.nGamesPlayed + 1,
     nGamesWon: oldStats.nGamesWon + (game.status === "won" ? 1 : 0),
     playedGameAttempts : oldPlayedGameAttempts,
-    actualVictorySequence: oldStats.actualVictorySequence + 1,
+    actualVictorySequence,
     bestVictorySequence: newBestVictorySequence
   }
 
+  localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(newStatistics));
   return newStatistics;
 }
 

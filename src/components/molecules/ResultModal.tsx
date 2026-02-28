@@ -4,6 +4,7 @@ import { usePlayerStatistics } from "../../hooks/usePlayerStatistics";
 import { saveGameStatistics } from "../../utils/storage";
 
 type ResultModalProps = {
+  maxAttempts: number,
   nAttempts: number
   isWinner: boolean
   answer: string
@@ -11,9 +12,10 @@ type ResultModalProps = {
 };
 
 export function ResultModal(props: ResultModalProps) {
-  const {nAttempts, isWinner, answer, onClose} = props
+  const {maxAttempts, nAttempts, isWinner, answer, onClose} = props
 
   const playerStats = usePlayerStatistics();
+  const winRate = playerStats.nGamesPlayed > 0 ? playerStats.nGamesWon * 100 / playerStats.nGamesPlayed : 0;
 
   const children = (
     <div className="w-full text-zinc-300">
@@ -49,7 +51,7 @@ export function ResultModal(props: ResultModalProps) {
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">jogos</span>
         </div>
         <div className="flex flex-col w-[23%]">
-          {playerStats.nGamesPlayed > 0 ? playerStats.nGamesWon * 100 / playerStats.nGamesPlayed : 0}%
+          {Math.floor(winRate)}%
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">de vitórias</span>
         </div>
         <div className="flex flex-col w-[23%]">
@@ -63,15 +65,22 @@ export function ResultModal(props: ResultModalProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <StatsHistogram label="1"/>
-        <StatsHistogram label="2"/>
-        <StatsHistogram label="3"/>
-        <StatsHistogram label="4"/>
-        <StatsHistogram label="5"/>
-        <StatsHistogram label="6"/>
-        <StatsHistogram label="7"/>
-        <StatsHistogram label="8"/>
-        <StatsHistogram label="💀"/>
+        {
+          Array.from({ length: maxAttempts }, (_, index) => {
+            return (
+              <StatsHistogram
+                label={String(index+1)}
+                max={playerStats.nGamesPlayed}
+                value={playerStats.playedGameAttempts[index]}
+              />
+            );
+          })
+        }
+        <StatsHistogram
+          label="💀"
+          max={playerStats.nGamesPlayed}
+          value={playerStats.nGamesPlayed - playerStats.nGamesWon}
+        />
       </div>
     </div>
   );

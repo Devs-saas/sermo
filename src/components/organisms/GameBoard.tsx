@@ -2,27 +2,24 @@ import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ToggleSwitch } from "../atoms/ToggleSwitch";
 import { ResultModal } from "../molecules/ResultModal";
+import { saveGameStatistics } from "../../utils/storage";
 
 export function GameBoard() {
-  const gameHook = useGame({maxAttempts: 8})
+  const maxAttempts = 8;
+
+  const gameHook = useGame({maxAttempts})
   const [resultOpen, setResultOpen] = useState(true)
   const [seeSolution, setSeeSolution] = useState(false)
 
-  console.log(seeSolution)
-
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
-
-      <div className="text-xs text-white/70">seeSolution: {String(seeSolution)}</div>
-
       {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
 
-      
       {!gameHook.isFinished && <WordInput wordLength={5} onSubmit={gameHook.submitGuess} />}
 
       {Array.from({ length: gameHook.remainingAttempts - 1}).map((_, i) => (
@@ -35,8 +32,9 @@ export function GameBoard() {
         </div>
       ))}
 
-      {(gameHook.isFinished || true && resultOpen) && (
-        <ResultModal 
+      {(gameHook.isFinished && resultOpen) && (
+        <ResultModal
+          maxAttempts={maxAttempts}
           nAttempts={gameHook.guesses.length}
           isWinner={gameHook.status === "won"}
           answer={gameHook.secret || "?????"}

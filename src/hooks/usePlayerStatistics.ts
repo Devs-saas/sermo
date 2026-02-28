@@ -8,7 +8,7 @@ export function usePlayerStatistics() {
     return {
       nGamesPlayed: 0,
       nGamesWon: 0,
-      playedGameAttempts: [],
+      playedGameAttempts: [0,0,0,0,0,0,0,0],
       actualVictorySequence: 0,
       bestVictorySequence: 0
     } as PlayerStatistics
