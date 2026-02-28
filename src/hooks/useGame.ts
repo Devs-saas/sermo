@@ -2,56 +2,67 @@ import { useRef, useState, useCallback, useMemo, useEffect } from "react"
 import { GameEngine } from "../core/gameEngine"
 import { Dictionary } from "../core/dictionary"
 import type { GuessResult, GameStatus } from "../core/types"
+import { saveGame, loadGame, getDateKey, getTodayKey } from "../utils/storage"
 import { getDailyAnswer } from "../utils/getDailyAnswer"
-import { saveGame, loadGame } from "../utils/storage"
 
 type UseGameOptions = {
   maxAttempts?: number
 }
 
 export function useGame({
-  maxAttempts = 7,
+  maxAttempts = 8,
 }: UseGameOptions) {
+
   const dictionary = useMemo(() => new Dictionary(), [])
-
-  const secret = useMemo(() => {
-    return getDailyAnswer(dictionary.getAnswersSet())
-  }, [dictionary])
-
-  const engineRef = useRef<GameEngine>(
-    new GameEngine(secret, dictionary, maxAttempts)
-  )
+  const gameKeyRef = useRef<string>(null)
+  const engineRef = useRef<GameEngine>(null)
+  const gameDateRef = useRef<string>(null)
+  const secretRef = useRef<string>(null)
 
   const [guesses, setGuesses] = useState<GuessResult[]>([])
   const [status, setStatus] = useState<GameStatus>("playing")
   const [remainingAttempts, setRemainingAttempts] = useState(maxAttempts)
   const [error, setError] = useState<string | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
+
+
+  useEffect(() => {
+    console.log("Initializing game...")
+    const today = new Date()
+    gameDateRef.current = today.toISOString();
+    const todayKey = getDateKey(today)
+
+    const existing = loadGame(todayKey)
+
+    if (existing) {
+      gameKeyRef.current = todayKey
+      engineRef.current = new GameEngine(existing.secret, dictionary, maxAttempts)
+      existing.attempts.forEach(g => {
+        engineRef.current?.submitGuess(g.guess)
+      })
+
+      secretRef.current = existing.secret
+      setStatus(existing.status)
+      setGuesses(existing.attempts)
+      setRemainingAttempts(engineRef.current.getRemainingAttempts())
+      syncState()
+    } else {
+      gameKeyRef.current = todayKey
+      const scrt = getDailyAnswer(dictionary.getAnswersSet())
+      engineRef.current = new GameEngine(scrt, dictionary, maxAttempts)
+
+      secretRef.current = scrt
+      syncState()
+    }
+  }, [])
 
   const syncState = useCallback(() => {
     const engine = engineRef.current
-    setGuesses(engine.getGuesses())
-    setStatus(engine.getStatus())
-    setRemainingAttempts(engine.getRemainingAttempts())
-  }, [])
-
-  // Restaurar jogo salvo ao montar
-  useEffect(() => {
-    const saved = loadGame()
-
-    if (saved) {
-      const restoredEngine = new GameEngine(secret, dictionary, maxAttempts)
-
-      saved.attempts.forEach(g => {
-        restoredEngine.submitGuess(g.guess)
-      })
-
-      engineRef.current = restoredEngine
-      syncState()
+    if (engine) {
+      setGuesses(engine.getGuesses())
+      setStatus(engine.getStatus())
+      setRemainingAttempts(engine.getRemainingAttempts())
     }
-
-    setIsLoaded(true)
-  }, [secret, dictionary, maxAttempts, syncState])
+  }, [])
 
   const submitGuess = useCallback(
     (guess: string) => {
@@ -60,16 +71,17 @@ export function useGame({
 
         setError(null)
 
-        engineRef.current.submitGuess(guess)
+        engineRef.current?.submitGuess(guess)
         syncState()
-
-        saveGame({
+        
+        saveGame(gameKeyRef.current??getTodayKey(),{
           date: new Date().toISOString(),
-          secret,
-          attempts: engineRef.current.getGuesses(),
-          status: engineRef.current.getStatus(),
+          secret: secretRef.current??"",
+          attempts: engineRef.current?.getGuesses()??[],
+          status: engineRef.current?.getStatus()??"playing",
         })
       } catch (err) {
+        console.error("Error submitting guess:", err)
         if (err instanceof Error) {
           setError(err.message)
         } else {
@@ -81,12 +93,12 @@ export function useGame({
   )
 
   const resetGame = useCallback(() => {
-    engineRef.current = new GameEngine(secret, dictionary, maxAttempts)
+    engineRef.current = new GameEngine(secretRef.current??"", dictionary, maxAttempts)
     setGuesses([])
     setStatus("playing")
     setRemainingAttempts(maxAttempts)
     setError(null)
-  }, [secret, dictionary, maxAttempts, status])
+  }, [secretRef, dictionary, maxAttempts, status])
 
   return {
     guesses,
@@ -95,8 +107,7 @@ export function useGame({
     submitGuess,
     error,
     resetGame,
-    isLoaded,
     isFinished: status !== "playing",
-    secret: status === "playing" ? null : secret,
+    secret: status === "playing" ? null : secretRef.current,
   }
 }
