@@ -1,5 +1,7 @@
 import { Modal, type ModalProps } from "../atoms/Modal";
 import { StatsHistogram } from "../atoms/StatsHistogram";
+import { usePlayerStatistics } from "../../hooks/usePlayerStatistics";
+import { saveGameStatistics } from "../../utils/storage";
 
 type ResultModalProps = {
   nAttempts: number
@@ -11,7 +13,7 @@ type ResultModalProps = {
 export function ResultModal(props: ResultModalProps) {
   const {nAttempts, isWinner, answer, onClose} = props
 
-  // const playerStatistics = usePlayerStatistics();
+  const playerStats = usePlayerStatistics();
 
   const children = (
     <div className="w-full text-zinc-300">
@@ -43,19 +45,19 @@ export function ResultModal(props: ResultModalProps) {
       </div>
       <div className="flex w-full flex-row justify-between gap-2 text-[clamp(0.95rem,7vw,3rem)]">
         <div className="flex flex-col w-[23%]">
-          10
+          {playerStats.nGamesPlayed}
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">jogos</span>
         </div>
         <div className="flex flex-col w-[23%]">
-          10%
+          {playerStats.nGamesPlayed > 0 ? playerStats.nGamesWon * 100 / playerStats.nGamesPlayed : 0}%
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">de vitórias</span>
         </div>
         <div className="flex flex-col w-[23%]">
-          10
+          {playerStats.actualVictorySequence}
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">sequência de vitórias</span>
         </div>
         <div className="flex flex-col w-[23%]">
-          10
+          {playerStats.bestVictorySequence}
           <span className="text-[clamp(0.95rem,2vw,1.2rem)]">melhor sequência</span>
         </div>
       </div>
