@@ -19,7 +19,7 @@ export function GuessRow({ guess, nLetters }: Props) {
         ))}
       </div>
 
-      <div className="flex justify-center lg:absolute lg:right-[-60%] lg:top-1/2 lg:-translate-y-1/2">
+      <div className="flex w-full lg:w-auto justify-center lg:absolute lg:-right-65 lg:top-1/2 lg:-translate-y-1/2">
         <CounterBox color="green" value={feedback.correctPosition} />
         <CounterBox color="yellow" value={feedback.correctLetterWrongPosition} />
         <CounterBox color="red" value={feedback.incorrect} />
