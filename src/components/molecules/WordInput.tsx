@@ -1,16 +1,13 @@
-import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react"
+import { useRef, useState, useEffect, useImperativeHandle } from "react"
 import { LetterBox } from "../atoms/LetterBox"
-
-export type WordInputHandle = {
-  pressKey: (key: string) => void
-}
 
 type Props = {
   wordLength: number
   onSubmit: (word: string) => void
+  ref: React.ForwardedRef<{ pressKey: (key: string) => void }>
 }
 
-export const WordInput = forwardRef<WordInputHandle, Props>(function WordInput({ wordLength, onSubmit }: Props, ref: React.ForwardedRef<WordInputHandle>) {
+export function WordInput({ wordLength, onSubmit, ref }: Props) {
   const [letters, setLetters] = useState<string[]>(
     Array(wordLength).fill("")
   )
@@ -154,4 +151,4 @@ export const WordInput = forwardRef<WordInputHandle, Props>(function WordInput({
       </div>
     </div>
   )
-})
+}

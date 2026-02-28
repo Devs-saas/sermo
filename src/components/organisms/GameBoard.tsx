@@ -1,6 +1,5 @@
 import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
-import type { WordInputHandle } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
 import { GameResult } from "./GameResult";
@@ -10,7 +9,7 @@ import { useState, useRef } from "react";
 export function GameBoard() {
   const gameHook = useGame({ maxAttempts: 8 })
   const [resultOpen, setResultOpen] = useState(true)
-  const wordInputRef = useRef<WordInputHandle>(null)
+  const wordInputRef = useRef<{ pressKey: (key: string) => void }>(null)
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
