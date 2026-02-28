@@ -127,17 +127,6 @@ export function WordInput({ wordLength, onSubmit, ref }: Props) {
 
   return (
     <div className="relative">
-      <input
-        ref={inputRef}
-        value={rawValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        className="absolute opacity-0"
-        inputMode="text"
-        autoCapitalize="characters"
-        autoCorrect="off"
-        autoFocus
-      />
 
       <div className="flex gap-1">
         {letters.map((letter, i) => (

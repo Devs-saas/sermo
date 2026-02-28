@@ -1,4 +1,4 @@
-import { KeyboardRow } from "../molecules/KeyboardRow.tsx"
+import { KeyboardRow } from "../molecules/KeyboardRow"
 
 type Props = {
     onKeyPress: (letter: string) => void
@@ -11,12 +11,10 @@ export function Keyboard({ onKeyPress }: Props) {
     row2.push("backspace")
     row3.push("enter")
     return (
-        <div className="flex flex-col items-center gap-2">
-            <div className="inline-flex flex-col gap-1">
-                <KeyboardRow letters={row1} offset={0} onKeyPress={onKeyPress} />
-                <KeyboardRow letters={row2} offset={14} onKeyPress={onKeyPress} />
-                <KeyboardRow letters={row3} offset={28} onKeyPress={onKeyPress} />
-            </div>
+        <div className="w-full max-w-[500px] mx-auto flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2 pb-4">
+            <KeyboardRow letters={row1} onKeyPress={onKeyPress} />
+            <KeyboardRow letters={row2} onKeyPress={onKeyPress} paddingLeft="5%" />
+            <KeyboardRow letters={row3} onKeyPress={onKeyPress} paddingLeft="10%" />
         </div>
     )
 }
