@@ -3,6 +3,8 @@ Senha &amp; Termo!
 
 Uma versão que mistura Termo com Senha, onde o jogador não vê quais letras estão corretas, apenas as quantidades de acertos.
 
+[Clique aqui para acessar o beta em produção](sermo-beta.vercel.app)
+
 ![anime surpreso](https://media.tenor.com/E4b9ghK-blwAAAAj/okaminc.gif)
 
 ---
