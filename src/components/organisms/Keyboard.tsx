@@ -12,12 +12,15 @@ export function Keyboard({ onKeyPress }: Props) {
     row2.push("backspace")
     row3.push("enter")
     return (
-        <div className={clsx("w-full max-w-[100vw] lg:max-w-lg mx-auto flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2 py-4",
-            "lg:fixed lg:bottom-0 lg:bg-(--brand-dark)/90 lg:backdrop-blur-lg"
+        <div className={clsx(
+            // mobile layout: fixed bottom full width
+            "fixed bottom-0 right-0 left-0 lg:w-full flex flex-col items-center gap-1 lg:gap-1.5 lg:gap-2 py-4 bg-(--brand-dark)/90 backdrop-blur-lg z-10",
+            // revert for lg+ screens
+            "lg:w-auto lg:z-auto lg:mx-auto lg:max-w-lg"
         )}>
             <KeyboardRow letters={row1} onKeyPress={onKeyPress} />
-            <KeyboardRow letters={row2} onKeyPress={onKeyPress} paddingLeft="5%" />
-            <KeyboardRow letters={row3} onKeyPress={onKeyPress} paddingLeft="10%" />
+            <KeyboardRow letters={row2} onKeyPress={onKeyPress} />
+            <KeyboardRow letters={row3} onKeyPress={onKeyPress} />
         </div>
     )
 }

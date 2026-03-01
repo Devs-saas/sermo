@@ -12,9 +12,16 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
 
     const isSpecialKey = letter === "enter" || letter === "backspace";
 
+    // define a base height so that keys remain square when using aspect-square
+    const heightClass = "h-[32px] sm:h-[44px]";
+
+    /* mobile (<md) behaviour: rows fill width and keys grow equally
+       desktop (md+) behaviour: revert to fixed sizes similar to original layout */
     const sizeClass = isSpecialKey
-        ? letter === "backspace"? "min-w-[32px] sm:min-w-[44px]" :"w-[60px] h-[32px] sm:w-[66px] sm:h-[44px]"
-        : "w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] aspect-square";
+        ? letter === "backspace"
+            ? `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[44px]`
+            : `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[66px] md:h-[44px]`
+        : `flex-none basis-[8.5%] ${heightClass} aspect-square md:w-[44px] md:h-[44px]`;
 
     return (
         <button
