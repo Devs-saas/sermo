@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
 import type { ColorState } from "../../core/types";
 
 type Props = {
@@ -8,6 +9,50 @@ type Props = {
 }
 
 export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
+    const [isPressed, setIsPressed] = useState(false);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const pressedKey = event.key.toLowerCase();
+            const letterLower = letter.toLowerCase();
+
+            // Match regular letters or special keys
+            if (
+                (letterLower === pressedKey) ||
+                (letterLower === "enter" && event.key === "Enter") ||
+                (letterLower === "backspace" && event.key === "Backspace")
+            ) {
+                setIsPressed(true);
+                onKeyPress(letter);
+
+                // Reset animation after it completes
+                setTimeout(() => setIsPressed(false), 100);
+            }
+        };
+
+        const handleKeyUp = (event: KeyboardEvent) => {
+            const releasedKey = event.key.toLowerCase();
+            const letterLower = letter.toLowerCase();
+
+            if (
+                (letterLower === releasedKey) ||
+                (letterLower === "enter" && event.key === "Enter") ||
+                (letterLower === "backspace" && event.key === "Backspace")
+            ) {
+                setIsPressed(false);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup", handleKeyUp);
+        };
+    }, [letter, onKeyPress]);
+
     const handleClick = () => {
         onKeyPress(letter);
     };
@@ -27,6 +72,7 @@ export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
 
     return (
         <button
+            ref={buttonRef}
             onClick={handleClick}
                 className={clsx(`
                 ${colorState === "right"?"bg-(--brand-selected-green)":""}
@@ -49,7 +95,7 @@ export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
                 shadow-[0_2px_4px_var(--brand-cream)]
                 hover:shadow-[0_3px_8px_var(--brand-cream)]
 
-                hover:-translate-y-0.5
+                ${isPressed ? "translate-y-0.5 shadow-[0_1px_2px_var(--brand-cream)]" : "hover:-translate-y-0.5"}
                 active:translate-y-0.5
 
                 transition-all duration-150 ease-out
