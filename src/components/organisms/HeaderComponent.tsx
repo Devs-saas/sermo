@@ -23,7 +23,7 @@ export function HeaderComponent() {
         <nav className="justify-self-center">
           <a href="#" className="inline-flex items-center gap-2">
             <img src="svgs/logo-simple.svg" alt="Sermo logo" className="h-10" />
-            <span className="text-4xl tracking-[0.15em] text-[var(--brand-cream)]">SERMO</span>
+            <span className="text-4xl tracking-[0.15em] text-(--brand-cream)">SERMO</span>
           </a>
         </nav>
 
