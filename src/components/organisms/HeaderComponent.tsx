@@ -13,7 +13,7 @@ export function HeaderComponent() {
 
   return (
     <>
-    <header className="sticky top-0 z-50 w-full backdrop-blur pb-5 px-4 sm:px-10">
+    <header className="sticky top-0 z-50 w-full bg-(--brand-dark)/60 backdrop-blur pb-5 px-4 sm:px-10">
       <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center">
         {/* left corner icons */}
         <div className="justify-self-start flex items-center gap-2">
