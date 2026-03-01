@@ -21,7 +21,7 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
         ? letter === "backspace"
             ? `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[44px]`
             : `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[66px] md:h-[44px]`
-        : `flex-none basis-[8.5%] ${heightClass} aspect-square md:w-[44px] md:h-[44px]`;
+        : `flex-none basis-[9%] ${heightClass} aspect-square md:w-[44px] md:h-[44px]`;
 
     return (
         <button
