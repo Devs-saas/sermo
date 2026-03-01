@@ -21,13 +21,13 @@ export function ToggleSwitch({ initialState = false, onCheckedChange }: toggleSw
         }}
       />
       <div 
-        className="relative w-16 h-8 bg-[var(--brand-red)] rounded-full
-          peer-focus:outline-none peer-checked:bg-[var(--brand-green)]
-          after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+        className="relative w-16 h-8 bg-(--brand-red) rounded-full
+          peer-focus:outline-none peer-checked:bg-(--brand-green)
+          after:content-[''] after:absolute after:top-0.5 after:left-0.5
           after:h-7 after:w-7 after:rounded-full after:bg-white after:transition-transform
           peer-checked:after:translate-x-8"
         />
-      <span className="select-none ms-3 text-ms uppercase font-medium text-heading text-[var(--brand-cream)]">Ver solução</span>
+      <span className="select-none ms-3 text-ms uppercase font-medium text-heading text-(--brand-cream)">Ver solução</span>
     </label>
   )
 }

@@ -69,7 +69,7 @@ export function Modal(props: ModalProps) {
         )}
         onAnimationEnd={handleAnimationEnd}
       >
-        <h2 className="mb-6 text-3xl font-bold text-[var(--brand-green)]">
+        <h2 className="mb-6 text-3xl font-bold text-(--brand-green)">
           {attrs?.title}
         </h2>
         <div 
