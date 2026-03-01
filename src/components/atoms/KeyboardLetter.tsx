@@ -19,9 +19,9 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
        desktop (md+) behaviour: revert to fixed sizes similar to original layout */
     const sizeClass = isSpecialKey
         ? letter === "backspace"
-            ? `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[44px]`
-            : `flex-none basis-[10%] ${heightClass} flex-shrink-0 md:w-[66px] md:h-[44px]`
-        : `flex-none basis-[9%] ${heightClass} aspect-square md:w-[44px] md:h-[44px]`;
+            ? `flex-none basis-[10%] ${heightClass} h-[40px] flex-shrink-0 md:w-[44px]`
+            : `flex-none basis-[10%] ${heightClass} h-[40px] flex-shrink-0 md:w-[66px] md:h-[44px]`
+        : `flex-none basis-[9%] ${heightClass} h-[40px] md:w-[44px] md:h-[44px]`;
 
     return (
         <button
@@ -33,7 +33,7 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
                 font-semibold
                 flex items-center justify-center
                 uppercase tracking-wide
-                text-xs sm:text-sm
+                text-sm sm:text-sm
                 select-none
                 ring
                 ring-(--brand-cream)/50
