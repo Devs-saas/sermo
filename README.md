@@ -1,4 +1,5 @@
-# Sermo
+# ![SERMO](./public/images/preview.png)
+
 Senha &amp; Termo!
 
 Uma versão que mistura Termo com Senha, onde o jogador não vê quais letras estão corretas, apenas as quantidades de acertos.
