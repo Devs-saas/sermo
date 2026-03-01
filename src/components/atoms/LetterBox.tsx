@@ -1,14 +1,7 @@
 import { useState } from "react"
 import clsx from "clsx"
-
-type ColorState = "neutral" | "right" | "wrong-placed" | "wrong";
-
-const colorStates: Record<ColorState, string> = {
-  "neutral"     : "bg-[var(--brand-cream)]",
-  "right"       : "bg-[var(--brand-selected-green)]",
-  "wrong-placed": "bg-[var(--brand-selected-yellow)]",
-  "wrong"       : "bg-[var(--brand-selected-red)]"
-}
+import type { ColorState } from "../../core/types"
+import { colorStates } from "../../core/consts"
 
 type Props = {
   letter: string
@@ -16,9 +9,10 @@ type Props = {
   className?: string
   initialState?: ColorState
   canChangeColor?: boolean
+  updateKeyboardColors?: (key: string, color: ColorState) => void
 }
 
-export function LetterBox({ letter, active, className, initialState = "neutral", canChangeColor = false}: Props) {
+export function LetterBox({ letter, active, className, updateKeyboardColors, initialState = "neutral", canChangeColor = false}: Props) {
   const [colorState, setColorState] = useState<ColorState>(initialState);
   const colorStateOrder: ColorState[] = ["neutral", "right", "wrong-placed", "wrong"];
 
@@ -28,6 +22,7 @@ export function LetterBox({ letter, active, className, initialState = "neutral",
     const nextIndex = (currentIndex + 1) % colorStateOrder.length;
 
     setColorState(colorStateOrder[nextIndex]);
+    updateKeyboardColors?.(letter, colorStateOrder[nextIndex]);
   }
 
   return (

@@ -1,13 +1,14 @@
 import { LetterBox } from "../atoms/LetterBox"
 import { CounterBox } from "../atoms/CounterBox"
-import type { GuessResult } from "../../core/types"
+import type { ColorState, GuessResult } from "../../core/types"
 
 type Props = {
   guess: GuessResult;
   nLetters?: number;
+  updateKeyboardColors: (key: string, color: ColorState) => void
 }
 
-export function GuessRow({ guess, nLetters }: Props) {
+export function GuessRow({ guess, nLetters, updateKeyboardColors }: Props) {
   const { guess: word, feedback } = guess;
   nLetters = nLetters ?? 5;
 
@@ -15,7 +16,7 @@ export function GuessRow({ guess, nLetters }: Props) {
     <div className="flex w-full flex-col lg:flex-row gap-2 lg:gap-0 lg:relative items-center justify-between">
       <div className="flex w-full gap-1 justify-center lg:mx-auto">
         {word.split("").map((l, i) => (
-          <LetterBox key={i} letter={l} canChangeColor={true}/>
+          <LetterBox key={i} letter={l} canChangeColor={true} updateKeyboardColors={updateKeyboardColors}/>
         ))}
       </div>
 

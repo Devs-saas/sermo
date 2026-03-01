@@ -1,11 +1,13 @@
 import clsx from "clsx"
 import { KeyboardRow } from "../molecules/KeyboardRow"
+import type { ColorState } from "../../core/types"
 
 type Props = {
     onKeyPress: (letter: string) => void
+    keyColors?: Record<string, ColorState>
 }
 
-export function Keyboard({ onKeyPress }: Props) {
+export function Keyboard({ onKeyPress, keyColors }: Props) {
     const row1 = "QWERTYUIOP".split("")
     const row2 = "ASDFGHJKL".split("")
     const row3 = "ZXCVBNM".split("")
@@ -18,9 +20,9 @@ export function Keyboard({ onKeyPress }: Props) {
             // revert for lg+ screens
             "lg:w-auto lg:z-auto lg:mx-auto lg:max-w-lg"
         )}>
-            <KeyboardRow letters={row1} onKeyPress={onKeyPress} />
-            <KeyboardRow letters={row2} onKeyPress={onKeyPress} />
-            <KeyboardRow letters={row3} onKeyPress={onKeyPress} />
+            <KeyboardRow letters={row1} onKeyPress={onKeyPress} keyColors={keyColors || {}}/>
+            <KeyboardRow letters={row2} onKeyPress={onKeyPress} keyColors={keyColors || {}}/>
+            <KeyboardRow letters={row3} onKeyPress={onKeyPress} keyColors={keyColors || {}}/>
         </div>
     )
 }
