@@ -2,25 +2,25 @@ import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
-import { useState } from "react";
+import { Keyboard } from "./Keyboard";
+import { useState, useRef } from "react";
 import { ResultModal } from "../molecules/ResultModal";
 
 export function GameBoard() {
-  const maxAttempts = 8;
-
-  const gameHook = useGame({maxAttempts})
+  const maxAttempts = 8
+  const gameHook = useGame({ maxAttempts })
   const [resultOpen, setResultOpen] = useState(true)
-  // const [seeSolution, setSeeSolution] = useState(false)
+  const wordInputRef = useRef<{ handleKey: (key: string) => void }>(null)
 
   return (
-    <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
+    <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2 pb-46 lg:pb-50">
       {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
+      
+      {!gameHook.isFinished && <WordInput ref={wordInputRef} wordLength={5} onSubmit={gameHook.submitGuess} />}
 
-      {!gameHook.isFinished && <WordInput wordLength={5} onSubmit={gameHook.submitGuess} />}
-
-      {Array.from({ length: gameHook.remainingAttempts - 1}).map((_, i) => (
+      {Array.from({ length: gameHook.remainingAttempts - 1 }).map((_, i) => (
         <div key={i} className="flex w-full items-center justify-center opacity-60">
           <div className="flex gap-1 w-full">
             {Array.from({ length: 5 }).map((_, j) => (
@@ -39,6 +39,9 @@ export function GameBoard() {
           onClose={() => setResultOpen(false)}
         />
       )}
+
+      <Keyboard onKeyPress={(key) => wordInputRef.current?.handleKey(key)} />
+
     </div>
   )
 }

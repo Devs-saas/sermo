@@ -1,113 +1,111 @@
-import { useRef, useState, useEffect } from "react"
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { LetterBox } from "../atoms/LetterBox"
 
 type Props = {
   wordLength: number
   onSubmit: (word: string) => void
+  ref: React.ForwardedRef<{ pressKey: (key: string) => void }>
 }
 
-export function WordInput({ wordLength, onSubmit }: Props) {
-  const [letters, setLetters] = useState<string[]>(
+export type WordInputHandle = {
+  handleKey: (key: string) => void
+}
+
+export const WordInput = forwardRef<WordInputHandle, Props>(
+({ wordLength, onSubmit }, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [currentWord, setCurrentWord] = useState<string[]>(
     Array(wordLength).fill("")
   )
+
   const [cursor, setCursor] = useState(0)
-  const [rawValue, setRawValue] = useState("")
-
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
 
   function focusAt(position: number) {
     setCursor(position)
-    inputRef.current?.focus()
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const newValue = e.target.value
-      .toUpperCase()
-      .replace(/[^A-Z]/g, "")
+  const handleKey = useCallback((rawKey: string) => {
+    const key = rawKey.toLowerCase()
 
-    const diff = newValue.length - rawValue.length
-    setRawValue(newValue)
-
-    // INSERÇÃO
-    if (diff > 0) {
-      const lastChar = newValue[newValue.length - 1]
-
-      setLetters((prev) => {
-        const copy = [...prev]
-        copy[cursor] = lastChar
-        return copy
-      })
-
-      if (cursor < wordLength - 1) {
-        setCursor((c) => c + 1)
-      }
-    }
-
-    // DELEÇÃO
-    if (diff < 0) {
-      setLetters((prev) => {
-        const copy = [...prev]
-
-        let newCursor = cursor
-
-        if (copy[cursor] !== "") {
-          copy[cursor] = ""
-          newCursor = Math.max(0, cursor - 1)
-        } else if (cursor > 0) {
-          copy[cursor - 1] = ""
-          newCursor = cursor - 1
-        }
-
-        setCursor(newCursor)
-        return copy
-      })
-    }
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      if (letters.every((l) => l !== "")) {
-        onSubmit(letters.join(""))
-        setLetters(Array(wordLength).fill(""))
+    // ENTER
+    if (key === "enter") {
+      const word = currentWord.join("")
+      if (!currentWord.includes("") && word.length === wordLength) {
+        onSubmit(word)
+        setCurrentWord(Array(wordLength).fill(""))
         setCursor(0)
-        setRawValue("")
       }
+
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      })
+      return
     }
 
-    if (e.key === "ArrowLeft") {
-      e.preventDefault()
-      setCursor((c) => Math.max(0, c - 1))
+    // BACKSPACE
+    if (key === "backspace") {
+      setCurrentWord((prev) => {
+        const next = [...prev]
+
+        next[cursor] = ""
+
+        return next
+      })
+      setCursor(Math.max(0, cursor - 1))
+      return
     }
 
-    if (e.key === "ArrowRight") {
-      e.preventDefault()
+    // LETRAS
+    if (/^[a-z]$/.test(key)) {
+      setCurrentWord((prev) => {
+        if (cursor >= wordLength) return prev
+
+        const next = [...prev]
+        next[cursor] = key
+
+        return next
+      })
       setCursor((c) => Math.min(wordLength - 1, c + 1))
+      return
     }
-  }
+
+    // SETAS
+    if (key === "arrowleft") {
+      setCursor((c) => Math.max(0, c - 1))
+      return
+    }
+
+    if (key === "arrowright") {
+      setCursor((c) => Math.min(wordLength - 1, c + 1))
+      return
+    }
+  }, [cursor, currentWord, wordLength, onSubmit])
+
+
+  useImperativeHandle(ref, () => ({
+    handleKey
+  }))
+  
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if(e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault()
+    }
+    handleKey(e.key)
+  }, [handleKey])
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [handleKeyDown])
 
   return (
-    <div className="relative">
-      <input
-        ref={inputRef}
-        value={rawValue}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        className="absolute opacity-0"
-        inputMode="text"
-        autoCapitalize="characters"
-        autoCorrect="off"
-        autoFocus
-      />
-
-      <div className="flex gap-1">
-        {letters.map((letter, i) => (
+    <div className="relative" ref={containerRef}>
+      <div className="flex gap-1 select-none">
+        {Array.from({ length: wordLength }).map((_, i) => (
           <div key={i} onClick={() => focusAt(i)} className="flex flex-1">
             <LetterBox
-              letter={letter}
+              letter={currentWord[i]}
               active={cursor === i}
             />
           </div>
@@ -115,4 +113,4 @@ export function WordInput({ wordLength, onSubmit }: Props) {
       </div>
     </div>
   )
-}
+})
