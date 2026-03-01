@@ -5,17 +5,23 @@ import { useGame } from "../../hooks/useGame"
 import { Keyboard } from "./Keyboard";
 import { useState, useRef } from "react";
 import { ResultModal } from "../molecules/ResultModal";
+import type { ColorState } from "../../core/types";
 
 export function GameBoard() {
   const maxAttempts = 8
   const gameHook = useGame({ maxAttempts })
   const [resultOpen, setResultOpen] = useState(true)
   const wordInputRef = useRef<{ handleKey: (key: string) => void }>(null)
+  const [keyboardColors, setKeyboardColors] = useState<Record<string, ColorState>>({})
+
+  const updateKeyboardColors = (key: string, color: ColorState) => {
+    setKeyboardColors(prev => ({ ...prev, [key]: color }))
+  }
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2 pb-46 lg:pb-50">
       {gameHook.guesses.map((g, i) => (
-        <GuessRow key={i} guess={g} />
+        <GuessRow key={i} guess={g} updateKeyboardColors={updateKeyboardColors} />
       ))}
       
       {!gameHook.isFinished && <WordInput ref={wordInputRef} wordLength={5} onSubmit={gameHook.submitGuess} />}
@@ -40,7 +46,7 @@ export function GameBoard() {
         />
       )}
 
-      <Keyboard onKeyPress={(key) => wordInputRef.current?.handleKey(key)} />
+      <Keyboard onKeyPress={(key) => wordInputRef.current?.handleKey(key)} keyColors={keyboardColors}/>
 
     </div>
   )

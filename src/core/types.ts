@@ -26,3 +26,5 @@ export type PlayerStatistics = {
   actualVictorySequence: number
   bestVictorySequence: number
 }
+
+export type ColorState = "neutral" | "right" | "wrong-placed" | "wrong";

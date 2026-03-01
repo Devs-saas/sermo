@@ -1,11 +1,13 @@
 import clsx from "clsx";
+import type { ColorState } from "../../core/types";
 
 type Props = {
     letter: string
     onKeyPress: (letter: string) => void
+    colorState?: ColorState
 }
 
-export function KeyboardLetter({ letter, onKeyPress }: Props) {
+export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
     const handleClick = () => {
         onKeyPress(letter);
     };
@@ -27,10 +29,16 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
         <button
             onClick={handleClick}
                 className={clsx(`
+                ${colorState === "right"?"bg-(--brand-selected-green)":""}
+                ${colorState === "wrong-placed"?"bg-(--brand-selected-yellow)":""}
+                ${colorState === "wrong"?"bg-(--brand-selected-red)":""}
                 bg-(--brand-dark)
+                ${colorState === "right"?"text-(--brand-dark)":""}
+                ${colorState === "wrong-placed"?"text-(--brand-dark)":""}
+                ${colorState === "wrong"?"text-(--brand-dark)":""}
                 text-(--brand-cream)
                 rounded-lg
-                font-semibold
+                font-extrabold
                 flex items-center justify-center
                 uppercase tracking-wide
                 text-sm sm:text-sm
