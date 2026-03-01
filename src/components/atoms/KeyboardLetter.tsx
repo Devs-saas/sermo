@@ -24,7 +24,6 @@ export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
                 (letterLower === "backspace" && event.key === "Backspace")
             ) {
                 setIsPressed(true);
-                onKeyPress(letter);
 
                 // Reset animation after it completes
                 setTimeout(() => setIsPressed(false), 100);
@@ -74,14 +73,14 @@ export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
         <button
             ref={buttonRef}
             onClick={handleClick}
-                className={clsx(`
-                ${colorState === "right"?"bg-(--brand-selected-green)":""}
-                ${colorState === "wrong-placed"?"bg-(--brand-selected-yellow)":""}
-                ${colorState === "wrong"?"bg-(--brand-selected-red)":""}
+            className={clsx(`
+                ${colorState === "right" ? "bg-(--brand-selected-green)" : ""}
+                ${colorState === "wrong-placed" ? "bg-(--brand-selected-yellow)" : ""}
+                ${colorState === "wrong" ? "bg-(--brand-selected-red)" : ""}
                 bg-(--brand-dark)
-                ${colorState === "right"?"text-(--brand-dark)":""}
-                ${colorState === "wrong-placed"?"text-(--brand-dark)":""}
-                ${colorState === "wrong"?"text-(--brand-dark)":""}
+                ${colorState === "right" ? "text-(--brand-dark)" : ""}
+                ${colorState === "wrong-placed" ? "text-(--brand-dark)" : ""}
+                ${colorState === "wrong" ? "text-(--brand-dark)" : ""}
                 text-(--brand-cream)
                 rounded-lg
                 font-extrabold
