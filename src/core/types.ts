@@ -18,3 +18,11 @@ export type PersistedGame = {
 
 
 export type GameStatus = "playing" | "won" | "lost"
+
+export type PlayerStatistics = {
+  nGamesPlayed: number
+  nGamesWon: number
+  playedGameAttempts: number[]
+  actualVictorySequence: number
+  bestVictorySequence: number
+}

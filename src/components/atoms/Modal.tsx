@@ -73,7 +73,7 @@ export function Modal(props: ModalProps) {
           {attrs?.title}
         </h2>
         <div 
-          className="flex flex-1 justify-center text-sm/relaxed text-[clamp(0.95rem, 1.5vw, 1.1rem)] max-w-[60ch] "
+          className="flex flex-1 justify-center text-sm/relaxed text-[clamp(0.95rem,1.5vw,1.1rem)]"
         >
           {attrs?.children}
         </div>

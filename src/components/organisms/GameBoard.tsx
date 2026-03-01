@@ -2,12 +2,13 @@ import { GuessRow } from "../molecules/GuessRow"
 import { WordInput } from "../molecules/WordInput"
 import { LetterBox } from "../atoms/LetterBox"
 import { useGame } from "../../hooks/useGame"
-import { GameResult } from "./GameResult";
 import { Keyboard } from "./Keyboard";
 import { useState, useRef } from "react";
+import { ResultModal } from "../molecules/ResultModal";
 
 export function GameBoard() {
-  const gameHook = useGame({ maxAttempts: 8 })
+  const maxAttempts = 8
+  const gameHook = useGame({ maxAttempts })
   const [resultOpen, setResultOpen] = useState(true)
   const wordInputRef = useRef<{ handleKey: (key: string) => void }>(null)
 
@@ -16,7 +17,7 @@ export function GameBoard() {
       {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}
-
+      
       {!gameHook.isFinished && <WordInput ref={wordInputRef} wordLength={5} onSubmit={gameHook.submitGuess} />}
 
       {Array.from({ length: gameHook.remainingAttempts - 1 }).map((_, i) => (
@@ -30,8 +31,9 @@ export function GameBoard() {
       ))}
 
       {(gameHook.isFinished && resultOpen) && (
-        <GameResult
-          n_attempts={gameHook.guesses.length}
+        <ResultModal
+          maxAttempts={maxAttempts}
+          nAttempts={gameHook.guesses.length}
           isWinner={gameHook.status === "won"}
           answer={gameHook.secret || "?????"}
           onClose={() => setResultOpen(false)}

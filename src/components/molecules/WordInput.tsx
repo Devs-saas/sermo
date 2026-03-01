@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react"
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react"
 import { LetterBox } from "../atoms/LetterBox"
 
 type Props = {
@@ -13,66 +13,85 @@ export type WordInputHandle = {
 
 export const WordInput = forwardRef<WordInputHandle, Props>(
 ({ wordLength, onSubmit }, ref) => {
-  const [currentWord, setCurrentWord] = useState<string>("")
+  const [currentWord, setCurrentWord] = useState<string[]>(
+    Array(wordLength).fill("")
+  )
+
   const [cursor, setCursor] = useState(0)
 
   function focusAt(position: number) {
     setCursor(position)
   }
 
-  function handleKey(key: string) {
-    key = key.toLowerCase()
-    // Enter envia
+  const handleKey = useCallback((rawKey: string) => {
+    const key = rawKey.toLowerCase()
+
+    // ENTER
     if (key === "enter") {
-      if (currentWord.length === wordLength) {
-        onSubmit(currentWord)
-        setCurrentWord("")
+      const word = currentWord.join("")
+      if (!currentWord.includes("") && word.length === wordLength) {
+        onSubmit(word)
+        setCurrentWord(Array(wordLength).fill(""))
         setCursor(0)
       }
       return
     }
 
-    // Backspace apaga
+    // BACKSPACE
     if (key === "backspace") {
-      setCurrentWord((prev) => prev.slice(0, -1))
-      setCursor((c) => Math.max(0, c - 1))
+      setCurrentWord((prev) => {
+        const next = [...prev]
+
+        next[cursor] = ""
+
+        return next
+      })
+      setCursor(Math.max(0, cursor - 1))
       return
     }
 
-    // Letras
+    // LETRAS
     if (/^[a-z]$/.test(key)) {
       setCurrentWord((prev) => {
-        if (prev.length >= wordLength) return prev
-        return prev + key
+        if (cursor >= wordLength) return prev
+
+        const next = [...prev]
+        next[cursor] = key
+
+        return next
       })
       setCursor((c) => Math.min(wordLength - 1, c + 1))
       return
     }
 
+    // SETAS
     if (key === "arrowleft") {
       setCursor((c) => Math.max(0, c - 1))
+      return
     }
 
     if (key === "arrowright") {
       setCursor((c) => Math.min(wordLength - 1, c + 1))
+      return
     }
-  }
+  }, [cursor, currentWord, wordLength, onSubmit])
+
 
   useImperativeHandle(ref, () => ({
     handleKey
   }))
   
-  function handleKeyDown(e: KeyboardEvent) {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if(e.key === "ArrowLeft" || e.key === "ArrowRight") {
       e.preventDefault()
     }
     handleKey(e.key)
-  }
+  }, [handleKey])
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [])
+  }, [handleKeyDown])
 
   return (
     <div className="relative">
@@ -80,7 +99,7 @@ export const WordInput = forwardRef<WordInputHandle, Props>(
         {Array.from({ length: wordLength }).map((_, i) => (
           <div key={i} onClick={() => focusAt(i)} className="flex flex-1">
             <LetterBox
-              letter={currentWord[i] || ""}
+              letter={currentWord[i]}
               active={cursor === i}
             />
           </div>
