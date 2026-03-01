@@ -40,7 +40,7 @@ export function ResultModal(props: ResultModalProps) {
       </div>
 
       <div>
-        <h2 className="my-2 text-[var(--brand-green)] text-3xl font-bold">
+        <h2 className="my-2 text-(--brand-green) text-3xl font-bold">
           Estatísticas
         </h2>
       </div>
@@ -68,6 +68,7 @@ export function ResultModal(props: ResultModalProps) {
           Array.from({ length: maxAttempts }, (_, index) => {
             return (
               <StatsHistogram
+                key={index}
                 label={String(index+1)}
                 max={playerStats.nGamesPlayed}
                 value={playerStats.playedGameAttempts[index]}
