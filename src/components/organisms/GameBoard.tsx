@@ -9,7 +9,7 @@ import { useState, useRef } from "react";
 export function GameBoard() {
   const gameHook = useGame({ maxAttempts: 8 })
   const [resultOpen, setResultOpen] = useState(true)
-  const wordInputRef = useRef<{ pressKey: (key: string) => void }>(null)
+  const wordInputRef = useRef<{ handleKey: (key: string) => void }>(null)
 
   return (
     <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2 lg:pb-50">
@@ -38,7 +38,7 @@ export function GameBoard() {
         />
       )}
 
-      <Keyboard onKeyPress={(key) => wordInputRef.current?.pressKey(key)} />
+      <Keyboard onKeyPress={(key) => wordInputRef.current?.handleKey(key)} />
 
     </div>
   )
