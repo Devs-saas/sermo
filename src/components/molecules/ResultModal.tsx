@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, type ModalProps } from "../atoms/Modal";
 import { StatsHistogram } from "../atoms/StatsHistogram";
 import { usePlayerStatistics } from "../../hooks/usePlayerStatistics";
-import { FaWhatsapp, FaLinkedin } from "react-icons/fa"
+import { FaWhatsapp, FaLinkedin, FaRegCopy  } from "react-icons/fa"
 import type { PlayerStatistics } from "../../core/types";
 
 type ResultModalProps = {
@@ -83,14 +83,23 @@ Jogue também: ${origin}`
       setShareStatus("error")
     }
   }
-
+  
+  const copyToClipboard = async () => {
+    try {
+      const text = formatShareText(playerStats)
+      await navigator.clipboard.writeText(text)
+      setShareStatus("copied")
+    } catch (error) {
+      setShareStatus("error")
+    }
+  }
 
   const children = (
     <div className="w-full text-zinc-300">
       <div>
       {isWinner ? (
         <>
-          <p className="mt-3 ">
+          <p>
             Parabéns, você acertou a palavra!
             <br />
             Com {nAttempts} tentativa{nAttempts === 1 ? "" : "s"}.
@@ -98,7 +107,7 @@ Jogue também: ${origin}`
         </>
       ) : (
         <>
-          <p className="mt-3 ">
+          <p>
             A palavra era:
           </p>
           <p className="text-2xl text-white font-bold mt-2 tracking-widest">
@@ -156,18 +165,23 @@ Jogue também: ${origin}`
         <div className="flex gap-2">
           <button
             onClick={shareWhatsApp}
-            className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-md font-semibold shadow-sm hover:brightness-95 transition"
+            className="flex items-center lg:flex-auto gap-2 px-4 py-2 bg-[#25D366] text-white rounded-md font-semibold shadow-sm hover:brightness-95 transition"
           >
             <FaWhatsapp size={32} />
-            Compartilhar
           </button>
 
           <button
             onClick={shareLinkedIn}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0A66C2] text-white rounded-md font-semibold shadow-sm hover:brightness-95 transition"
+            className="flex items-center lg:flex-auto gap-2 px-4 py-2 bg-[#0A66C2] text-white rounded-md font-semibold shadow-sm hover:brightness-95 transition"
           >
             <FaLinkedin size={32} />
-            Compartilhar
+          </button>
+
+          <button
+            onClick={copyToClipboard}
+            className="flex items-center lg:flex-auto gap-2 px-4 py-2 bg-(--brand-cream) text-(--brand-dark) rounded-md font-semibold shadow-sm hover:brightness-95 transition"
+          >
+            <FaRegCopy size={32} />
           </button>
         </div>
 
