@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react"
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { LetterBox } from "../atoms/LetterBox"
 
 type Props = {
@@ -13,6 +13,7 @@ export type WordInputHandle = {
 
 export const WordInput = forwardRef<WordInputHandle, Props>(
 ({ wordLength, onSubmit }, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null)
   const [currentWord, setCurrentWord] = useState<string[]>(
     Array(wordLength).fill("")
   )
@@ -34,6 +35,11 @@ export const WordInput = forwardRef<WordInputHandle, Props>(
         setCurrentWord(Array(wordLength).fill(""))
         setCursor(0)
       }
+
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      })
       return
     }
 
@@ -94,7 +100,7 @@ export const WordInput = forwardRef<WordInputHandle, Props>(
   }, [handleKeyDown])
 
   return (
-    <div className="relative">
+    <div className="relative" ref={containerRef}>
       <div className="flex gap-1 select-none">
         {Array.from({ length: wordLength }).map((_, i) => (
           <div key={i} onClick={() => focusAt(i)} className="flex flex-1">
