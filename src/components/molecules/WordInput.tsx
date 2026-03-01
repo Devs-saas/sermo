@@ -132,14 +132,14 @@ export function WordInput({ wordLength, onSubmit, ref }: Props) {
         value={rawValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="absolute opacity-0"
+        className="absolute opacity-0 size-0"
         inputMode="text"
         autoCapitalize="characters"
         autoCorrect="off"
         autoFocus
       />
 
-      <div className="flex gap-1">
+      <div className="flex gap-1 select-none">
         {letters.map((letter, i) => (
           <div key={i} onClick={() => focusAt(i)} className="flex flex-1">
             <LetterBox

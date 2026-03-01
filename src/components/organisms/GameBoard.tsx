@@ -12,7 +12,7 @@ export function GameBoard() {
   const wordInputRef = useRef<{ pressKey: (key: string) => void }>(null)
 
   return (
-    <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2">
+    <div className="flex flex-col w-[60vw] mx-auto md:max-w-lg gap-2 lg:pb-50">
       {gameHook.guesses.map((g, i) => (
         <GuessRow key={i} guess={g} />
       ))}

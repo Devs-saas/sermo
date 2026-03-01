@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type Props = {
     letter: string
     onKeyPress: (letter: string) => void
@@ -9,16 +11,40 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
     };
 
     const isSpecialKey = letter === "enter" || letter === "backspace";
-    const baseClass = "bg-gradient-to-b from-gray-100 to-gray-200 rounded-md font-bold text-gray-800 flex items-center justify-center cursor-pointer shadow-sm hover:shadow-md active:translate-y-0.5 active:shadow-sm transition-all duration-75 border border-gray-300 text-xs sm:text-sm uppercase select-none";
 
     const sizeClass = isSpecialKey
-        ? "w-[54px] h-[36px] sm:w-[66px] sm:h-[44px]"
-        : "w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] aspect-square";
+        ? "w-[54px] h-[32px] sm:w-[66px] sm:h-[44px]"
+        : "w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] aspect-square";
 
     return (
         <button
             onClick={handleClick}
-            className={`${sizeClass} ${baseClass}`}
+                className={clsx(`
+                bg-(--brand-dark)
+                text-(--brand-cream)
+                rounded-lg
+                font-semibold
+                flex items-center justify-center
+                uppercase tracking-wide
+                text-xs sm:text-sm
+                select-none
+                ring
+                ring-(--brand-cream)/50
+
+                shadow-[0_2px_4px_var(--brand-cream)]
+                hover:shadow-[0_3px_8px_var(--brand-cream)]
+
+                hover:-translate-y-0.5
+                active:translate-y-0.5
+
+                transition-all duration-150 ease-out
+
+                focus:outline-none
+                focus:ring-1
+                focus:ring-(--brand-cream)
+                `,
+                sizeClass
+            )}
         >
             {letter === "backspace" ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

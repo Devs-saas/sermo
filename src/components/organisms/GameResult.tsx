@@ -28,7 +28,7 @@ export function GameResult({ isWinner, answer, n_attempts, onClose }: Props) {
         
         {isWinner ? (
           <>
-            <h2 className="text-3xl font-bold text-[var(--brand-green)]">
+            <h2 className="text-3xl font-bold text-(--brand-green)">
               🎉 Você venceu!
             </h2>
             <p className="mt-3 text-zinc-300">
@@ -39,7 +39,7 @@ export function GameResult({ isWinner, answer, n_attempts, onClose }: Props) {
           </>
         ) : (
           <>
-            <h2 className="text-3xl font-bold text-[var(--brand-red)]">
+            <h2 className="text-3xl font-bold text-(--brand-red)">
               😢 Você perdeu!
             </h2>
             <p className="mt-3 text-zinc-300">
