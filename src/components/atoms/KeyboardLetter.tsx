@@ -13,7 +13,7 @@ export function KeyboardLetter({ letter, onKeyPress }: Props) {
     const isSpecialKey = letter === "enter" || letter === "backspace";
 
     const sizeClass = isSpecialKey
-        ? "w-[54px] h-[32px] sm:w-[66px] sm:h-[44px]"
+        ? letter === "backspace"? "min-w-[32px] sm:min-w-[44px]" :"w-[60px] h-[32px] sm:w-[66px] sm:h-[44px]"
         : "w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] aspect-square";
 
     return (
