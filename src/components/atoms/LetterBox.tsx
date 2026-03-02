@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import clsx from "clsx"
 import type { ColorState } from "../../core/types"
 import { colorStates } from "../../core/consts"
 
 type Props = {
   letter: string
+  colorStateProp?: ColorState
   active?: boolean
   invalid?: boolean
   className?: string
@@ -13,7 +14,7 @@ type Props = {
   updateKeyboardColors?: (key: string, color: ColorState) => void
 }
 
-export function LetterBox({ letter, active, className, updateKeyboardColors, initialState = "neutral", canChangeColor = false, invalid = false}: Props) {
+export function LetterBox({ colorStateProp="neutral", letter, active, className, updateKeyboardColors, initialState = "neutral", canChangeColor = false, invalid = false}: Props) {
   const [colorState, setColorState] = useState<ColorState>(initialState);
   const colorStateOrder: ColorState[] = ["neutral", "right", "wrong-placed", "wrong"];
 
@@ -25,6 +26,11 @@ export function LetterBox({ letter, active, className, updateKeyboardColors, ini
     setColorState(colorStateOrder[nextIndex]);
     updateKeyboardColors?.(letter, colorStateOrder[nextIndex]);
   }
+
+  useEffect(() => {
+    console.log("colorStateProp changed", colorStateProp);
+    setColorState(colorStateProp);
+  }, [colorStateProp])
 
   return (
     <div
