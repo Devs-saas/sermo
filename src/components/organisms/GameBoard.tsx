@@ -24,7 +24,7 @@ export function GameBoard() {
         <GuessRow key={i} guess={g} updateKeyboardColors={updateKeyboardColors} />
       ))}
       
-      {!gameHook.isFinished && <WordInput ref={wordInputRef} wordLength={5} onSubmit={gameHook.submitGuess} />}
+      {!gameHook.isFinished && <WordInput ref={wordInputRef} wordLength={5} onSubmit={gameHook.submitGuess} error={gameHook.error} />}
 
       {Array.from({ length: gameHook.remainingAttempts - 1 }).map((_, i) => (
         <div key={i} className="flex w-full items-center justify-center opacity-60">

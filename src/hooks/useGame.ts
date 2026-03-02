@@ -89,12 +89,12 @@ export function useGame({
         });
 
       } catch (err) {
-        console.error("Error submitting guess:", err)
         if (err instanceof Error) {
           setError(err.message)
         } else {
           setError("Unexpected error")
         }
+        setTimeout(() => setError(null), 900)
       }
     },
     [status, syncState]
