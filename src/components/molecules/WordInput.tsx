@@ -4,6 +4,7 @@ import { LetterBox } from "../atoms/LetterBox"
 type Props = {
   wordLength: number
   onSubmit: (word: string) => void
+  error: string | null
   ref: React.ForwardedRef<{ pressKey: (key: string) => void }>
 }
 
@@ -12,11 +13,20 @@ export type WordInputHandle = {
 }
 
 export const WordInput = forwardRef<WordInputHandle, Props>(
-({ wordLength, onSubmit }, ref) => {
+({ wordLength, onSubmit, error }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [currentWord, setCurrentWord] = useState<string[]>(
     Array(wordLength).fill("")
   )
+
+  const [invalid, setInvalid] = useState(false)
+
+  useEffect(() => {
+    if (error) {
+      setInvalid(true)
+      setTimeout(() => setInvalid(false), 600)
+    }
+  }, [error])
 
   const [cursor, setCursor] = useState(0)
 
@@ -103,10 +113,22 @@ export const WordInput = forwardRef<WordInputHandle, Props>(
     <div className="relative" ref={containerRef}>
       <div className="flex gap-1 select-none">
         {Array.from({ length: wordLength }).map((_, i) => (
-          <div key={i} onClick={() => focusAt(i)} className="flex flex-1">
+          <div
+            style={
+              invalid
+                ? { animationDelay: `${i * 60}ms` }
+                : undefined
+            }
+            className={`
+              flex flex-1 gap-1 select-none
+              transition-all duration-200
+              ${invalid ? "animate-shake" : ""}
+            `}
+            key={i} onClick={() => focusAt(i)}>
             <LetterBox
               letter={currentWord[i]}
               active={cursor === i}
+              invalid={invalid}
             />
           </div>
         ))}

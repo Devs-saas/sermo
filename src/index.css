@@ -29,6 +29,18 @@
     transform: scale(0.95);
   }
 }
+@keyframes shake {
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(-6px); }
+  40% { transform: translateY(6px); }
+  60% { transform: translateY(-6px); }
+  80% { transform: translateY(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease;
+}
+
 @import "tailwindcss";
 
 :root {
