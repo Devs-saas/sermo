@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { evaluateGuess } from "./evaluateGuess"
+import { evaluateGuess, evaluateGuessPositions } from "./evaluateGuess"
 
 describe("evaluateGuess", () => {
   it("should return all correct when words are equal", () => {
@@ -36,5 +36,62 @@ describe("evaluateGuess", () => {
     const result = evaluateGuess("BALAO", "AAAAA")
 
     expect(result.correctPosition + result.correctLetterWrongPosition).toBeLessThanOrEqual(3)
+  })
+})
+
+describe("evaluateGuessPositions", () => {
+
+  it("deve lançar erro se os tamanhos forem diferentes", () => {
+    expect(() =>
+      evaluateGuessPositions("ABC", "ABCD")
+    ).toThrow()
+  })
+
+  it("deve marcar todas como right quando guess = secret", () => {
+    const result = evaluateGuessPositions("APPLE", "APPLE")
+
+    expect(result.positions).toEqual([
+      "right",
+      "right",
+      "right",
+      "right",
+      "right",
+    ])
+  })
+
+  it("deve marcar todas como wrong quando nenhuma letra existe", () => {
+    const result = evaluateGuessPositions("APPLE", "ZZZZZ")
+
+    expect(result.positions).toEqual([
+      "wrong",
+      "wrong",
+      "wrong",
+      "wrong",
+      "wrong",
+    ])
+  })
+
+  it("deve marcar letras corretas fora de posição como wrong-placed", () => {
+    const result = evaluateGuessPositions("APPLE", "PAPEL")
+
+    expect(result.positions).toEqual([
+      "wrong-placed", // P
+      "wrong-placed", // A
+      "right",        // P
+      "wrong-placed", // E
+      "wrong-placed", // L
+    ])
+  })
+
+  it("não deve contar letras repetidas além da quantidade no secret", () => {
+    const result = evaluateGuessPositions("APPLE", "PPPPP")
+
+    expect(result.positions).toEqual([
+      "wrong",
+      "right",
+      "right",
+      "wrong",
+      "wrong",
+    ])
   })
 })

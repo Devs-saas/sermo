@@ -4,6 +4,10 @@ export type Feedback = {
   incorrect: number
 }
 
+export type FeedbackPosition = {
+  positions: ColorState[]
+}
+
 export type GuessResult = {
   guess: string
   feedback: Feedback
@@ -15,7 +19,6 @@ export type PersistedGame = {
   attempts: GuessResult[];
   status: GameStatus;
 };
-
 
 export type GameStatus = "playing" | "won" | "lost"
 
