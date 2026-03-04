@@ -15,6 +15,14 @@ export function GuessRow({ guess, nLetters, updateKeyboardColors }: Props) {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
+    if(feedback.correctPosition === 5) return
+    
+    word.split("").forEach((letter, _) => {
+      updateKeyboardColors(letter, "neutral");
+    })
+  }, [])
+
+  useEffect(() => {
     if(feedback.correctPosition === 5) {
       setIsComplete(true);
       for(let i = 0; i < word.length; i++) {
