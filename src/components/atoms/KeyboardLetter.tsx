@@ -88,8 +88,7 @@ export function KeyboardLetter({ letter, onKeyPress, colorState }: Props) {
                 uppercase tracking-wide
                 text-sm sm:text-sm
                 select-none
-                ring
-                ring-(--brand-cream)/50
+                ${colorState ? "ring ring-(--brand-cream)/50" : "ring-2 ring-(--brand-cream)"}
 
                 shadow-[0_2px_4px_var(--brand-cream)]
                 hover:shadow-[0_3px_8px_var(--brand-cream)]
